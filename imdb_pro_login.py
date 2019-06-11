@@ -1,5 +1,5 @@
 # Copyright 2019, J. Elliott Staffer, All Rights Reserved
-# Version 1.0.7 - Mac
+# Version 1.0.8 - Mac
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -64,7 +64,7 @@ def main():
     # 40 scrolls = ~1000 profiles loaded into results infinite scroll
     # IMDb only allows you to load to 'page=399' and each scroll counts as a page, as can be seen in their url which changes after each scroll
     print('url before scroll: ', driver.current_url)
-    for i in range(0,399):
+    for i in range(0,0):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(3)
         print("scrolled: ", i + 1)
@@ -95,7 +95,7 @@ def main():
     f = open('{0}/{1}.IMDbProfiles.{2}.csv'.format(folder, len(items), start_time), 'w', newline='')
     csvWriter = csv.writer(f, dialect='excel')
     #csvWriter = csv.writer(open('test.csv', 'w', newline=''), delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    csvWriter.writerow(['full_name', 'first_name', 'last_name', 'starMeter', 'direct_contact', 'professions', 'link_imdb_pro', 'link_imdb', 'link_img', 'source_summary', 'source_contacts', 'source_about', 'source_filmography', 'source_starMeter_graph'])
+    csvWriter.writerow(['full_name', 'first_name', 'last_name', 'starMeter', 'direct_contact', 'professions', 'link_imdb_pro', 'link_imdb', 'link_img', 'source_summary', 'source_contacts', 'source_filmography', 'source_about', 'source_images', 'source_starMeter_graph'])
 
     print("==================")
     # iterate through items
@@ -112,9 +112,9 @@ def main():
         
         # get full name
         # get name header element
-        full_name = driver.find_element_by_xpath('//*[@id="name_heading"]/div/div/div[2]/div[1]/h1/span')
-        name_array = full_name.text.split()
-        print('full_name: ', full_name.text)
+        full_name = driver.find_element_by_xpath('//*[@id="name_heading"]/div/div/div[2]/div[1]/h1/span').text
+        name_array = full_name.split()
+        print('full_name: ', full_name)
         first_name = name_array[0].strip()
         last_name = "unknown"
         names_count = len(name_array)
@@ -145,14 +145,14 @@ def main():
             starMeter = driver.find_element_by_xpath('//*[@id="popularity_widget"]/div[2]/div/div/div[1]/div[2]/div/div[2]/span/span/a').text
         except:
             starMeter = 'not found'
-        print('professions: ', starMeter)
+        print('starMeter: ', starMeter)
             
 
         # get direct contact
+        direct_contact_value = "not checked"
         try:
             direct_contact_section_header = "not checked"
             direct_contact_section = ""
-            direct_contact_value = "not checked"
             try:                                                       
                 direct_contact_section = driver.find_element_by_xpath('//*[@id="contacts"]/div[1]/div[1]/div/span')
             except:
@@ -220,6 +220,7 @@ def main():
             link_imdb_pro = link_imdb
         if 'https://pro.' in link_imdb:
             link_imdb = link_imdb.replace('https://pro.', 'https://')
+        print('link_imdb_pro: ', link_imdb_pro)
         print('link_imdb: ', link_imdb)
 
         # get thumbnail image link
@@ -247,7 +248,7 @@ def main():
         try:
             filmography_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[1]')
             source_filmography = filmography_section.get_attribute("outerHTML")
-            print(source_summary)
+            print(source_filmography)
             # 
         except:
             source_filmography = 'not found'
@@ -258,13 +259,12 @@ def main():
         try:
             starMeter_graph_section = driver.find_element_by_xpath('//*[@id="meters_row"]/div/div/div[1]/div/div[1]')
             source_starMeter_graph = starMeter_graph_section.get_attribute("outerHTML")
-            print(source_summary)
+            print(source_starMeter_graph)
             # 
         except:
             source_starMeter_graph = 'not found'
             print("no filmography section found")
-            
-
+        
         # move to About tab
         driver.get(link_imdb_pro + 'about')               
         # wait for about box contents to load
@@ -274,13 +274,29 @@ def main():
             about_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[2]')
             # summary_section_items = summary_section.find_elements_by_tag_name('div')
             source_about = about_section.get_attribute("outerHTML")
-            print(source_summary)
+            print(source_about)
         except:
             source_about = 'not found'
             print("no about section found")
 
+        # move to Images tab
+        driver.get(link_imdb_pro + 'images')               
+        # wait for about box contents to load
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="const_tabs"]/div[3]')))
+        # WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="photo_set"]')))
+        
+        source_images = ''
+        try:
+            images_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[3]')
+            # summary_section_items = summary_section.find_elements_by_tag_name('div')
+            source_images = images_section.get_attribute("outerHTML")
+            print(source_images)
+        except:
+            source_images = 'not found'
+            print("no images section found")
+
         # write to csv
-        csvWriter.writerow([full_name.text, first_name, last_name, starMeter, direct_contact_value, professions, link_imdb_pro, link_imdb, link_img, source_summary, source_contacts, source_about, source_filmography, source_starMeter_graph])
+        csvWriter.writerow([full_name, first_name, last_name, starMeter, direct_contact_value, professions, link_imdb_pro, link_imdb, link_img, source_summary, source_contacts, source_filmography, source_about, source_images, source_starMeter_graph])
         # Close the tab with URL B
         driver.close()
         print('user tab closed...')
@@ -291,14 +307,15 @@ def main():
         print("of ", len(items))
         print("Direct contacts found count: ", direct_contacts_found_count)
         print("***##################")
-        continue
+        # continue
         # for debug testing to limit items
-        # if items.index(link) == 8:
-        #     break
-        # else:
-        #     continue 
+        if items.index(link) == 3:
+            break
+        else:
+            continue 
 
     f.close()
+    driver.close()
     print("ending...")
     print("start time: ", start_time)
     end_now = datetime.now() # ending date and time
