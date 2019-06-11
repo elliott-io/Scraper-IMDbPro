@@ -64,7 +64,7 @@ def main():
     # 40 scrolls = ~1000 profiles loaded into results infinite scroll
     # IMDb only allows you to load to 'page=399' and each scroll counts as a page, as can be seen in their url which changes after each scroll
     print('url before scroll: ', driver.current_url)
-    for i in range(0,0):
+    for i in range(0,405):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(3)
         print("scrolled: ", i + 1)
@@ -238,7 +238,7 @@ def main():
             summary_section = driver.find_element_by_xpath('//*[@id="const_page_summary_section"]')
             # summary_section_items = summary_section.find_elements_by_tag_name('div')
             source_summary = summary_section.get_attribute("outerHTML")
-            print(source_summary)
+            # print(source_summary)
         except:
             source_summary = 'not found'
             print("no summary section found")
@@ -248,8 +248,7 @@ def main():
         try:
             filmography_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[1]')
             source_filmography = filmography_section.get_attribute("outerHTML")
-            print(source_filmography)
-            # 
+            # print(source_filmography)
         except:
             source_filmography = 'not found'
             print("no filmography section found")
@@ -259,8 +258,7 @@ def main():
         try:
             starMeter_graph_section = driver.find_element_by_xpath('//*[@id="meters_row"]/div/div/div[1]/div/div[1]')
             source_starMeter_graph = starMeter_graph_section.get_attribute("outerHTML")
-            print(source_starMeter_graph)
-            # 
+            # print(source_starMeter_graph)
         except:
             source_starMeter_graph = 'not found'
             print("no filmography section found")
@@ -274,7 +272,7 @@ def main():
             about_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[2]')
             # summary_section_items = summary_section.find_elements_by_tag_name('div')
             source_about = about_section.get_attribute("outerHTML")
-            print(source_about)
+            # print(source_about)
         except:
             source_about = 'not found'
             print("no about section found")
@@ -290,7 +288,7 @@ def main():
             images_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[3]')
             # summary_section_items = summary_section.find_elements_by_tag_name('div')
             source_images = images_section.get_attribute("outerHTML")
-            print(source_images)
+            # print(source_images)
         except:
             source_images = 'not found'
             print("no images section found")
@@ -309,10 +307,10 @@ def main():
         print("***##################")
         # continue
         # for debug testing to limit items
-        if items.index(link) == 3:
-            break
-        else:
-            continue 
+        # if items.index(link) == 3:
+        #     break
+        # else:
+        #     continue 
 
     f.close()
     driver.close()
