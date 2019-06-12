@@ -1,5 +1,5 @@
 # Copyright 2019, J. Elliott Staffer, All Rights Reserved
-# Version 1.0.8 - Mac
+# Version 1.0.9 - Mac
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -95,7 +95,8 @@ def main():
     f = open('{0}/{1}.IMDbProfiles.{2}.csv'.format(folder, len(items), start_time), 'w', newline='')
     csvWriter = csv.writer(f, dialect='excel')
     #csvWriter = csv.writer(open('test.csv', 'w', newline=''), delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    csvWriter.writerow(['full_name', 'first_name', 'last_name', 'starMeter', 'direct_contact', 'professions', 'link_imdb_pro', 'link_imdb', 'link_img', 'source_summary', 'source_contacts', 'source_filmography', 'source_about', 'source_images', 'source_starMeter_graph'])
+    # csvWriter.writerow(['full_name', 'first_name', 'last_name', 'starMeter', 'direct_contact', 'professions', 'link_imdb_pro', 'link_imdb', 'link_img', 'source_summary', 'source_contacts', 'source_filmography', 'source_about', 'source_images', 'source_starMeter_graph'])
+    csvWriter.writerow(['full_name', 'first_name', 'last_name', 'starMeter', 'direct_contact', 'professions', 'link_imdb_pro', 'link_imdb', 'link_img', 'source_summary', 'source_contacts'])
 
     print("==================")
     # iterate through items
@@ -243,58 +244,59 @@ def main():
             source_summary = 'not found'
             print("no summary section found")
 
-        # get filmography source
-        source_filmography = ''
-        try:
-            filmography_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[1]')
-            source_filmography = filmography_section.get_attribute("outerHTML")
-            # print(source_filmography)
-        except:
-            source_filmography = 'not found'
-            print("no filmography section found")
+        # # get filmography source
+        # source_filmography = ''
+        # try:
+        #     filmography_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[1]')
+        #     source_filmography = filmography_section.get_attribute("outerHTML")
+        #     # print(source_filmography)
+        # except:
+        #     source_filmography = 'not found'
+        #     print("no filmography section found")
 
-        # get starMeter graph source
-        source_starMeter_graph = ''
-        try:
-            starMeter_graph_section = driver.find_element_by_xpath('//*[@id="meters_row"]/div/div/div[1]/div/div[1]')
-            source_starMeter_graph = starMeter_graph_section.get_attribute("outerHTML")
-            # print(source_starMeter_graph)
-        except:
-            source_starMeter_graph = 'not found'
-            print("no filmography section found")
+        # # get starMeter graph source
+        # source_starMeter_graph = ''
+        # try:
+        #     starMeter_graph_section = driver.find_element_by_xpath('//*[@id="meters_row"]/div/div/div[1]/div/div[1]')
+        #     source_starMeter_graph = starMeter_graph_section.get_attribute("outerHTML")
+        #     # print(source_starMeter_graph)
+        # except:
+        #     source_starMeter_graph = 'not found'
+        #     print("no filmography section found")
         
-        # move to About tab
-        driver.get(link_imdb_pro + 'about')               
-        # wait for about box contents to load
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="const_tabs"]/div[2]')))
-        source_about = ''
-        try:
-            about_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[2]')
-            # summary_section_items = summary_section.find_elements_by_tag_name('div')
-            source_about = about_section.get_attribute("outerHTML")
-            # print(source_about)
-        except:
-            source_about = 'not found'
-            print("no about section found")
+        # # move to About tab
+        # driver.get(link_imdb_pro + 'about')               
+        # # wait for about box contents to load
+        # WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="const_tabs"]/div[2]')))
+        # source_about = ''
+        # try:
+        #     about_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[2]')
+        #     # summary_section_items = summary_section.find_elements_by_tag_name('div')
+        #     source_about = about_section.get_attribute("outerHTML")
+        #     # print(source_about)
+        # except:
+        #     source_about = 'not found'
+        #     print("no about section found")
 
-        # move to Images tab
-        driver.get(link_imdb_pro + 'images')               
-        # wait for about box contents to load
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="const_tabs"]/div[3]')))
-        # WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="photo_set"]')))
+        # # move to Images tab
+        # driver.get(link_imdb_pro + 'images')               
+        # # wait for about box contents to load
+        # WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="const_tabs"]/div[3]')))
+        # # WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="photo_set"]')))
         
-        source_images = ''
-        try:
-            images_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[3]')
-            # summary_section_items = summary_section.find_elements_by_tag_name('div')
-            source_images = images_section.get_attribute("outerHTML")
-            # print(source_images)
-        except:
-            source_images = 'not found'
-            print("no images section found")
+        # source_images = ''
+        # try:
+        #     images_section = driver.find_element_by_xpath('//*[@id="const_tabs"]/div[3]')
+        #     # summary_section_items = summary_section.find_elements_by_tag_name('div')
+        #     source_images = images_section.get_attribute("outerHTML")
+        #     # print(source_images)
+        # except:
+        #     source_images = 'not found'
+        #     print("no images section found")
 
         # write to csv
-        csvWriter.writerow([full_name, first_name, last_name, starMeter, direct_contact_value, professions, link_imdb_pro, link_imdb, link_img, source_summary, source_contacts, source_filmography, source_about, source_images, source_starMeter_graph])
+        # csvWriter.writerow([full_name, first_name, last_name, starMeter, direct_contact_value, professions, link_imdb_pro, link_imdb, link_img, source_summary, source_contacts, source_filmography, source_about, source_images, source_starMeter_graph])
+        csvWriter.writerow([full_name, first_name, last_name, starMeter, direct_contact_value, professions, link_imdb_pro, link_imdb, link_img, source_summary, source_contacts])
         # Close the tab with URL B
         driver.close()
         print('user tab closed...')
