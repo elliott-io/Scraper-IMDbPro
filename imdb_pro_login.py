@@ -1,5 +1,5 @@
 # Copyright 2019, J. Elliott Staffer, All Rights Reserved
-# Version 1.0.10 - Mac
+# Version 1.0.11 - Mac
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -24,12 +24,16 @@ login_url = 'https://pro.imdb.com/login/imdb?u=%2F'
 # search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#age=20-34&media=has_primary_image&starMeter=257000-&sort=ranking' # +257k starmeter and 20-34 age range (young adult) and has headshot
 # search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#age=20-34&starMeter=257000-&sort=ranking' # +257k starmeter and 20-34 age range (young adult) and has headshot
 # search_url = 'https://pro.imdb.com/people?ref_=hm_nv_ppl_tsm#age=20-34&starMeter=20000-50000&media=has_primary_image&sort=ranking' # +10k-50k starmeter and 20-34 age range (young adult) and has headshot
-search_url = 'https://pro.imdb.com/people?ref_=hm_nv_ppl_tsm#sort=ranking'
+# search from top starMeter
+# search_url = 'https://pro.imdb.com/people?ref_=hm_nv_ppl_tsm#sort=ranking'
+# search from specific starMeter
+search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#starMeter=1020-&sort=ranking'
 
 def main():
 
+    current_directory = os.path.dirname(__file__)
     # mv chrome driver from Downloads to Applications 
-    chromedriver = "/applications/chromedriver"
+    chromedriver = os.path.join(current_directory, 'chromedriver')
     os.environ["webdriver.chrome.driver"] = chromedriver
 
     
@@ -87,7 +91,7 @@ def main():
     direct_contacts_found_count = 0
 
     # make output folder if not existing
-    folder = 'output'
+    folder = os.path.join(current_directory, 'output')
     if not os.path.exists(folder):
         os.makedirs(folder)
     
@@ -316,8 +320,8 @@ def main():
             #     continue 
         except Exception as e:
             print(str(e))
-            # save row with imdb pro and imdb links only
-            csvWriter.writerow(['full_name', 'first_name', 'last_name', 'starMeter', 'direct_contact_value', 'professions', link_imdb_pro, link_imdb, 'link_img', 'source_summary', 'source_contacts'])
+            # save row with imdb pro, imdb links, and exception (saved to source_contacts column) only
+            csvWriter.writerow(['full_name', 'first_name', 'last_name', 'starMeter', 'direct_contact_value', 'professions', link_imdb_pro, link_imdb, 'link_img', 'source_summary', str(e)])
             # Close the tab with user url
             driver.close()
             print('user tab closed...')
