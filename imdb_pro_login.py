@@ -1,5 +1,5 @@
 # Copyright 2019, J. Elliott Staffer, All Rights Reserved
-# Version 1.0.11 - Mac
+# Version 1.0.12 - Mac
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -19,19 +19,14 @@ PASSWORD = "ekQ-bZr-b0z-Mzy"
 # login with IMBd credentials
 login_url = 'https://pro.imdb.com/login/imdb?u=%2F'
 # url to navigate to after login
-# search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#starMeter=50000-100000,100000-&sort=ranking' # +50k starmeter
-# search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#age=20-34&starMeter=50000-100000,100000-&sort=ranking' # +50k starmeter and 20-34 age range (young adult)
-# search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#age=20-34&media=has_primary_image&starMeter=257000-&sort=ranking' # +257k starmeter and 20-34 age range (young adult) and has headshot
-# search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#age=20-34&starMeter=257000-&sort=ranking' # +257k starmeter and 20-34 age range (young adult) and has headshot
-# search_url = 'https://pro.imdb.com/people?ref_=hm_nv_ppl_tsm#age=20-34&starMeter=20000-50000&media=has_primary_image&sort=ranking' # +10k-50k starmeter and 20-34 age range (young adult) and has headshot
 # search from top starMeter
 # search_url = 'https://pro.imdb.com/people?ref_=hm_nv_ppl_tsm#sort=ranking'
 # search from specific starMeter
-search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#starMeter=1020-&sort=ranking'
+search_url = 'https://pro.imdb.com/people?ref_=search_nv_ppl_tsm#starMeter=11020-&sort=ranking'
 
 def main():
 
-    current_directory = os.path.dirname(__file__)
+    current_directory = os.path.dirname(os.path.abspath(__file__))
     # mv chrome driver from Downloads to Applications 
     chromedriver = os.path.join(current_directory, 'chromedriver')
     os.environ["webdriver.chrome.driver"] = chromedriver
@@ -199,6 +194,9 @@ def main():
                                     continue
                     except:
                         direct_contact_value = "na"
+                elif: 
+                    direct_contact_section_header == "Company":
+                    /
                 else:
                     direct_contact_value = "na"
                 print("direct_contact_value: ", direct_contact_value)
